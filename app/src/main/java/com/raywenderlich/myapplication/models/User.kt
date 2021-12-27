@@ -33,8 +33,6 @@
  */
 package com.raywenderlich.myapplication.models
 
-import androidx.compose.runtime.saveable.listSaver
-
 data class User(
   val username: String,
   val email: String,
