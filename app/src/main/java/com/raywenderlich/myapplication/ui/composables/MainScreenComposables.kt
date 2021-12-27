@@ -36,10 +36,10 @@ package com.raywenderlich.myapplication.ui.composables
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -47,12 +47,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.raywenderlich.myapplication.models.User
 
 @Composable
-fun FabAddUser(onClick: () -> Unit = { }) {
+fun FabAddUser(navController: NavController) {
   FloatingActionButton(
-    onClick = onClick,
+    onClick = { navController.navigate("form") },
     backgroundColor = MaterialTheme.colors.secondary
   ) {
     Icon(
@@ -64,18 +65,8 @@ fun FabAddUser(onClick: () -> Unit = { }) {
 }
 
 @Composable
-fun UserList(users: List<User>) {
-  val listState = rememberLazyListState()
+fun UserList() {
 
-  LazyColumn(state = listState) {
-    items(
-      items = users,
-      key = { user -> user.email }
-    ) { user ->
-      ItemUser(user)
-      Divider()
-    }
-  }
 }
 
 @Composable
@@ -104,5 +95,5 @@ fun PreviewItemUser() {
 @Preview
 fun PreviewUserList() {
   val user = User("username", "email@email.com", "Iron Man", true)
-  UserList(users = listOf(user, user, user, user, user))
+  UserList()
 }
