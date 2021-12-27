@@ -12,7 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -22,37 +22,37 @@ import androidx.compose.ui.unit.dp
 import com.raywenderlich.myapplication.R
 import com.raywenderlich.myapplication.models.User
 
-const val favoriteAvengerDefault = "Select favorite Avenger"
-
 @Composable
-fun RegistrationFormScreen(navigateBack: (User) -> Unit) {
+fun RegistrationFormScreen(
+  email: String,
+  username: String,
+  isStarWarsSelected: Boolean,
+  avengers: List<String>,
+  showDropDownMenu: Boolean,
+  favoriteAvenger: String,
+  isRegisterEnabled: Boolean,
+  onUsernameChanged: (String) -> Unit,
+  onEmailChanged: (String) -> Unit,
+  onStarWarsSelectedChanged: (Boolean) -> Unit,
+  onFavoriteAvengerChanged: (Int) -> Unit,
+  onDropDownClicked: () -> Unit,
+  onDropDownDismissed: () -> Unit,
+  onClearClicked: () -> Unit,
+  onRegisterClicked: (User) -> Unit
+) {
   Column(
     modifier = Modifier.padding(16.dp)
   ) {
-    var email by remember { mutableStateOf("") }
-    var username by remember { mutableStateOf("") }
-    var isStarWarsSelected by remember { mutableStateOf(true) }
-    val avengers = listOf("Iron Man", "Capitan America", "Hulk", "Spiderman", "Black Widow")
-    var showDropDownMenu by remember { mutableStateOf(false) }
-    var favoriteAvenger by remember { mutableStateOf(favoriteAvengerDefault) }
-    var isRegisterEnabled by remember { mutableStateOf(false) }
-
     EditTextField(
       value = email,
-      onValueChange = {
-        email = it
-        isRegisterEnabled = isFormValid(email, username, favoriteAvenger)
-      },
+      onValueChange = { onEmailChanged(it) },
       leadingIcon = Icons.Default.Email,
       placeholder = R.string.email
     )
 
     EditTextField(
       value = username,
-      onValueChange = {
-        username = it
-        isRegisterEnabled = isFormValid(email, username, favoriteAvenger)
-      },
+      onValueChange = { onUsernameChanged(it) },
       leadingIcon = Icons.Default.AccountBox,
       placeholder = R.string.username,
       modifier = Modifier.padding(top = 16.dp)
@@ -65,35 +65,33 @@ fun RegistrationFormScreen(navigateBack: (User) -> Unit) {
     ) {
       RadioButtonWithText(
         isSelected = isStarWarsSelected,
-        onClick = { isStarWarsSelected = true },
+        onClick = { onStarWarsSelectedChanged(true) },
         text = R.string.star_wars
       )
       RadioButtonWithText(
         isSelected = !isStarWarsSelected,
-        onClick = { isStarWarsSelected = false },
+        onClick = { onStarWarsSelectedChanged(false) },
         text = R.string.star_trek
       )
     }
     Row(
       modifier = Modifier
         .padding(vertical = 16.dp)
-        .clickable(onClick = { showDropDownMenu = true })
+        .clickable(onClick = { onDropDownClicked() })
     ) {
       DropDown(
         selectedValue = favoriteAvenger,
         showDropDownMenu = showDropDownMenu,
         menuItems = avengers,
-        onDismissRequest = { showDropDownMenu = false },
+        onDismissRequest = { onDropDownDismissed() },
         onItemSelected = { index ->
-          favoriteAvenger = avengers[index]
-          showDropDownMenu = !showDropDownMenu
-          isRegisterEnabled = isFormValid(email, username, favoriteAvenger)
+          onFavoriteAvengerChanged(index)
         }
       )
     }
     OutlinedButton(
       onClick = {
-        navigateBack(
+        onRegisterClicked(
           User(
             username = username,
             email = email,
@@ -108,13 +106,7 @@ fun RegistrationFormScreen(navigateBack: (User) -> Unit) {
       Text(stringResource(R.string.register))
     }
     OutlinedButton(
-      onClick = {
-        username = ""
-        email = ""
-        isStarWarsSelected = true
-        isRegisterEnabled = false
-        favoriteAvenger = favoriteAvengerDefault
-      },
+      onClick = { onClearClicked() },
       modifier = Modifier
         .fillMaxWidth()
         .padding(top = 8.dp)
@@ -187,11 +179,24 @@ fun RadioButtonWithText(
   )
 }
 
-private fun isFormValid(email: String, username: String, avenger: String) =
-  email.isNotEmpty() && username.isNotEmpty() && avenger != favoriteAvengerDefault
-
 @Preview
 @Composable
 fun PreviewTextInputField() {
-  RegistrationFormScreen {}
+  RegistrationFormScreen(
+    avengers = listOf(),
+    email = "",
+    favoriteAvenger = "",
+    username = "",
+    isStarWarsSelected = true,
+    isRegisterEnabled = true,
+    onClearClicked = {},
+    onDropDownClicked = {},
+    onDropDownDismissed = {},
+    onEmailChanged = {},
+    onFavoriteAvengerChanged = {},
+    onRegisterClicked = {},
+    onStarWarsSelectedChanged = {},
+    onUsernameChanged = {},
+    showDropDownMenu = false
+  )
 }
