@@ -8,7 +8,17 @@ import androidx.lifecycle.ViewModel
 const val favoriteAvengerDefault = "Select favorite Avenger"
 
 class FormViewModel : ViewModel() {
-  val avengers = listOf("Iron Man", "Capitan America", "Hulk", "Spiderman", "Black Widow")
+  val avengers = listOf(
+    "Iron Man",
+    "Capitan America",
+    "Hulk",
+    "Spiderman",
+    "Black Widow",
+    "Hawkeye",
+    "Thor",
+    "Scarlet Witch",
+    "Black Panther"
+  )
 
   private val _email = MutableLiveData<String>()
   val email: LiveData<String>
