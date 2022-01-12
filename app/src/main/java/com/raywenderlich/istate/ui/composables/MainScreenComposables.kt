@@ -31,7 +31,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication.ui.composables
+package com.raywenderlich.istate.ui.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.raywenderlich.myapplication.models.User
+import com.raywenderlich.istate.models.User
 
 @Composable
 fun FabAddUser(onClick: () -> Unit = { }) {

@@ -31,10 +31,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication.ui.theme
+package com.raywenderlich.istate
 
-import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.raywenderlich.istate.models.User
 
-val PrimaryColor = Color(0xFF006837)
-val PrimaryDark = Color(0xFF004012)
-val Accent = Color(0xFFC75F00)
+class MainViewModel : ViewModel() {
+
+  private val _users = MutableLiveData<List<User>>()
+  val users: LiveData<List<User>>
+    get() = _users
+
+  fun addUser(user: User) {
+    val users = _users.value?.toMutableList() ?: mutableListOf()
+    users.add(user)
+    _users.value = users
+  }
+}

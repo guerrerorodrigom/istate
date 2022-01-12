@@ -31,7 +31,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication
+package com.raywenderlich.istate
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData

@@ -31,7 +31,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication
+package com.raywenderlich.istate
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -48,11 +48,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.raywenderlich.myapplication.models.User
-import com.raywenderlich.myapplication.ui.composables.FabAddUser
-import com.raywenderlich.myapplication.ui.composables.RegistrationFormScreen
-import com.raywenderlich.myapplication.ui.composables.UserList
-import com.raywenderlich.myapplication.ui.theme.IStateTheme
+import com.raywenderlich.istate.models.User
+import com.raywenderlich.istate.ui.composables.FabAddUser
+import com.raywenderlich.istate.ui.composables.RegistrationFormScreen
+import com.raywenderlich.istate.ui.composables.UserList
+import com.raywenderlich.istate.ui.theme.IStateTheme
 
 class MainActivity : ComponentActivity() {
   private val mainViewModel: MainViewModel by viewModels()

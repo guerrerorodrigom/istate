@@ -31,14 +31,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication.ui.theme
+package com.raywenderlich.istate.ui.theme
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Shapes
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 
-val Shapes = Shapes(
-  small = RoundedCornerShape(4.dp),
-  medium = RoundedCornerShape(4.dp),
-  large = RoundedCornerShape(0.dp)
-)
+val PrimaryColor = Color(0xFF006837)
+val PrimaryDark = Color(0xFF004012)
+val Accent = Color(0xFFC75F00)

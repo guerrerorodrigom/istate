@@ -31,7 +31,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication.ui.composables
+package com.raywenderlich.istate.ui.composables
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -52,8 +52,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.raywenderlich.myapplication.R
-import com.raywenderlich.myapplication.models.User
+import com.raywenderlich.istate.models.User
+import istate.R
 
 @Composable
 fun RegistrationFormScreen(
