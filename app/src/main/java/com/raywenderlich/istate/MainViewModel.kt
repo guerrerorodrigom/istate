@@ -31,11 +31,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication.models
+package com.raywenderlich.istate
 
-data class User(
-  val username: String,
-  val email: String,
-  val favoriteAvenger: String,
-  val likesStarWars: Boolean
-)
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.raywenderlich.istate.models.User
+
+class MainViewModel : ViewModel() {
+
+  private val _users = MutableLiveData<List<User>>()
+  val users: LiveData<List<User>>
+    get() = _users
+
+  fun addUser(user: User) {
+    val users = _users.value?.toMutableList() ?: mutableListOf()
+    users.add(user)
+    _users.value = users
+  }
+}

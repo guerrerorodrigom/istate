@@ -31,14 +31,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication.ui.theme
+package com.raywenderlich.istate
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Shapes
-import androidx.compose.ui.unit.dp
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material.FabPosition
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.raywenderlich.istate.ui.composables.FabAddUser
+import com.raywenderlich.istate.ui.composables.RegistrationFormScreen
+import com.raywenderlich.istate.ui.composables.UserList
+import com.raywenderlich.istate.ui.theme.IStateTheme
 
-val Shapes = Shapes(
-  small = RoundedCornerShape(4.dp),
-  medium = RoundedCornerShape(4.dp),
-  large = RoundedCornerShape(0.dp)
-)
+class MainActivity : ComponentActivity() {
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContent {
+      IStateTheme {
+        val navController = rememberNavController()
+
+        NavHost(navController = navController, startDestination = "list") {
+          composable("list") {
+            UserListScreen(navController)
+          }
+          composable("form") {
+            RegistrationFormScreen()
+          }
+        }
+      }
+    }
+  }
+}
+
+@Composable
+fun UserListScreen(
+  navController: NavController,
+) {
+  Surface(color = MaterialTheme.colors.background) {
+    Scaffold(
+      floatingActionButton = {
+        FabAddUser(navController)
+      },
+      floatingActionButtonPosition = FabPosition.End
+    ) {
+      UserList()
+    }
+  }
+}

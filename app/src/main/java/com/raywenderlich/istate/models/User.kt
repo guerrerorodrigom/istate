@@ -31,58 +31,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication
+package com.raywenderlich.istate.models
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.material.FabPosition
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.raywenderlich.myapplication.ui.composables.FabAddUser
-import com.raywenderlich.myapplication.ui.composables.RegistrationFormScreen
-import com.raywenderlich.myapplication.ui.composables.UserList
-import com.raywenderlich.myapplication.ui.theme.IStateTheme
-
-class MainActivity : ComponentActivity() {
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContent {
-      IStateTheme {
-        val navController = rememberNavController()
-
-        NavHost(navController = navController, startDestination = "list") {
-          composable("list") {
-            UserListScreen(navController)
-          }
-          composable("form") {
-            RegistrationFormScreen()
-          }
-        }
-      }
-    }
-  }
-}
-
-@Composable
-fun UserListScreen(
-  navController: NavController,
-) {
-  Surface(color = MaterialTheme.colors.background) {
-    Scaffold(
-      floatingActionButton = {
-        FabAddUser(navController)
-      },
-      floatingActionButtonPosition = FabPosition.End
-    ) {
-      UserList()
-    }
-  }
-}
+data class User(
+  val username: String,
+  val email: String,
+  val favoriteAvenger: String,
+  val likesStarWars: Boolean
+)

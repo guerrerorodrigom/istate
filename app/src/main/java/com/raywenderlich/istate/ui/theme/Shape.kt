@@ -31,25 +31,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.myapplication.ui.theme
+package com.raywenderlich.istate.ui.theme
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Shapes
+import androidx.compose.ui.unit.dp
 
-private val LightColorPalette = lightColors(
-  primary = PrimaryColor,
-  primaryVariant = PrimaryDark,
-  secondary = Accent
+val Shapes = Shapes(
+  small = RoundedCornerShape(4.dp),
+  medium = RoundedCornerShape(4.dp),
+  large = RoundedCornerShape(0.dp)
 )
-
-@Composable
-fun IStateTheme(content: @Composable() () -> Unit) {
-
-  MaterialTheme(
-    colors = LightColorPalette,
-    typography = Typography,
-    shapes = Shapes,
-    content = content
-  )
-}
