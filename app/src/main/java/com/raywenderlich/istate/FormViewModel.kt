@@ -33,6 +33,7 @@
  */
 package com.raywenderlich.istate
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -56,6 +57,10 @@ class FormViewModel : ViewModel() {
   private val _email = MutableLiveData<String>()
   val email: LiveData<String>
     get() = _email
+
+  private val _isEmailValid = MutableLiveData<Boolean>()
+  val isEmailValid: LiveData<Boolean>
+    get() = _isEmailValid
 
   private val _username = MutableLiveData<String>()
   val username: LiveData<String>
@@ -83,6 +88,9 @@ class FormViewModel : ViewModel() {
     addSource(favoriteAvenger) {
       value = isFormValid()
     }
+    addSource(isEmailValid) {
+      value = isFormValid()
+    }
   }
 
   fun onClearClicked() {
@@ -102,6 +110,7 @@ class FormViewModel : ViewModel() {
 
   fun onEmailChanged(value: String) {
     _email.value = value
+    _isEmailValid.value = validateEmail(value)
   }
 
   fun onFavoriteAvengerChanged(index: Int) {
@@ -117,8 +126,13 @@ class FormViewModel : ViewModel() {
     _isStarWarsSelected.value = value
   }
 
+  private fun validateEmail(email: String): Boolean {
+     return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+  }
+
   private fun isFormValid() =
-    _email.value?.isNotEmpty() == true && _username.value?.isNotEmpty() == true && _favoriteAvenger.value?.equals(
-      favoriteAvengerDefault
-    ) == false
+    _email.value?.isNotEmpty() == true &&
+      _isEmailValid.value == true &&
+      _username.value?.isNotEmpty() == true &&
+      _favoriteAvenger.value?.equals(favoriteAvengerDefault) == false
 }

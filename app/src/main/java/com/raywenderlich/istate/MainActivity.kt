@@ -78,6 +78,7 @@ class MainActivity : ComponentActivity() {
             val isRegisterEnabledState by formViewModel.isFormValid.observeAsState(false)
             val isStarWarsSelectedState by formViewModel.isStarWarsSelected.observeAsState(true)
             val showDropDownMenuState by formViewModel.showDropDownMenu.observeAsState(false)
+            val isEmailValid by formViewModel.isEmailValid.observeAsState(false)
 
             RegistrationFormScreen(
               avengers = formViewModel.avengers,
@@ -98,7 +99,8 @@ class MainActivity : ComponentActivity() {
                 formViewModel.onClearClicked()
                 mainViewModel.addUser(user)
                 navController.popBackStack()
-              }
+              },
+              isValidEmail = isEmailValid
             )
           }
         }

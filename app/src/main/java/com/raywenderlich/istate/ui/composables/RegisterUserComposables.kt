@@ -64,6 +64,7 @@ fun RegistrationFormScreen(
   showDropDownMenu: Boolean,
   favoriteAvenger: String,
   isRegisterEnabled: Boolean,
+  isValidEmail: Boolean,
   onUsernameChanged: (String) -> Unit,
   onEmailChanged: (String) -> Unit,
   onStarWarsSelectedChanged: (Boolean) -> Unit,
@@ -80,7 +81,8 @@ fun RegistrationFormScreen(
       value = email,
       onValueChange = { onEmailChanged(it) },
       leadingIcon = Icons.Default.Email,
-      placeholder = R.string.email
+      placeholder = R.string.email,
+      isError = !isValidEmail
     )
 
     EditTextField(
@@ -88,7 +90,8 @@ fun RegistrationFormScreen(
       onValueChange = { onUsernameChanged(it) },
       leadingIcon = Icons.Default.AccountBox,
       placeholder = R.string.username,
-      modifier = Modifier.padding(top = 16.dp)
+      modifier = Modifier.padding(top = 16.dp),
+      isError = false
     )
 
     Row(
@@ -183,6 +186,7 @@ fun EditTextField(
   onValueChange: (String) -> Unit,
   leadingIcon: ImageVector,
   @StringRes placeholder: Int,
+  isError: Boolean,
   modifier: Modifier = Modifier
 ) {
   OutlinedTextField(
@@ -190,7 +194,8 @@ fun EditTextField(
     onValueChange = { onValueChange(it) },
     leadingIcon = { Icon(leadingIcon, contentDescription = "") },
     modifier = modifier.fillMaxWidth(),
-    placeholder = { Text(stringResource(placeholder)) }
+    placeholder = { Text(stringResource(placeholder)) },
+    isError = isError
   )
 }
 
@@ -230,6 +235,7 @@ fun PreviewTextInputField() {
     onRegisterClicked = {},
     onStarWarsSelectedChanged = {},
     onUsernameChanged = {},
-    showDropDownMenu = false
+    showDropDownMenu = false,
+    isValidEmail = true
   )
 }
