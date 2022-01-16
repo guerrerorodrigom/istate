@@ -36,6 +36,7 @@ package com.raywenderlich.istate
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -51,6 +52,7 @@ import com.raywenderlich.istate.ui.composables.UserList
 import com.raywenderlich.istate.ui.theme.IStateTheme
 
 class MainActivity : ComponentActivity() {
+  private val mainViewModel: MainViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
