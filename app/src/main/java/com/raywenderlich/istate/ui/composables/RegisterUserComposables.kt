@@ -46,6 +46,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -102,12 +103,14 @@ fun RegistrationFormScreen(
       RadioButtonWithText(
         isSelected = isStarWarsSelected,
         onClick = { onStarWarsSelectedChanged(true) },
-        text = R.string.star_wars
+        text = R.string.star_wars,
+        modifier = Modifier.align(Alignment.CenterVertically)
       )
       RadioButtonWithText(
         isSelected = !isStarWarsSelected,
         onClick = { onStarWarsSelectedChanged(false) },
-        text = R.string.star_trek
+        text = R.string.star_trek,
+        modifier = Modifier.align(Alignment.CenterVertically)
       )
     }
     Row(
