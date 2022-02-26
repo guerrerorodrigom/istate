@@ -42,6 +42,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -59,12 +61,15 @@ class MainActivity : ComponentActivity() {
     setContent {
       IStateTheme {
         val navController = rememberNavController()
+        val users by mainViewModel.users.observeAsState(emptyList())
 
         NavHost(navController = navController, startDestination = "list") {
           composable("list") {
             UserListScreen(navController)
           }
           composable("form") {
+            val formViewModel: FormViewModel by viewModels()
+
             RegistrationFormScreen()
           }
         }
