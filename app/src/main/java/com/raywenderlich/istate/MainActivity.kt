@@ -48,6 +48,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.raywenderlich.istate.models.RegistrationFormData
 import com.raywenderlich.istate.models.User
 import com.raywenderlich.istate.ui.composables.FabAddUser
 import com.raywenderlich.istate.ui.composables.RegistrationFormScreen
@@ -70,24 +71,10 @@ class MainActivity : ComponentActivity() {
           }
           composable("form") {
             val formViewModel: FormViewModel by viewModels()
-            val emailState by formViewModel.email.observeAsState("")
-            val usernameState by formViewModel.username.observeAsState("")
-            val favoriteAvengerState by formViewModel.favoriteAvenger.observeAsState(
-              favoriteAvengerDefault
-            )
-            val isRegisterEnabledState by formViewModel.isFormValid.observeAsState(false)
-            val isStarWarsSelectedState by formViewModel.isStarWarsSelected.observeAsState(true)
-            val showDropDownMenuState by formViewModel.showDropDownMenu.observeAsState(false)
-            val isEmailValid by formViewModel.isEmailValid.observeAsState(false)
+            val formData by formViewModel.formData.observeAsState(RegistrationFormData())
 
             RegistrationFormScreen(
-              avengers = formViewModel.avengers,
-              email = emailState,
-              username = usernameState,
-              favoriteAvenger = favoriteAvengerState,
-              isRegisterEnabled = isRegisterEnabledState,
-              isStarWarsSelected = isStarWarsSelectedState,
-              showDropDownMenu = showDropDownMenuState,
+              registrationFormData = formData,
               onClearClicked = formViewModel::onClearClicked,
               onDropDownClicked = formViewModel::onDropDownClicked,
               onDropDownDismissed = formViewModel::onDropDownDismissed,
@@ -99,8 +86,7 @@ class MainActivity : ComponentActivity() {
                 formViewModel.onClearClicked()
                 mainViewModel.addUser(user)
                 navController.popBackStack()
-              },
-              isValidEmail = isEmailValid
+              }
             )
           }
         }

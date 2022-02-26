@@ -35,104 +35,73 @@ package com.raywenderlich.istate
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.raywenderlich.istate.models.RegistrationFormData
+import com.raywenderlich.istate.models.avengersList
 
 const val favoriteAvengerDefault = "Select favorite Avenger"
 
 class FormViewModel : ViewModel() {
-  val avengers = listOf(
-    "Iron Man",
-    "Capitan America",
-    "Hulk",
-    "Spiderman",
-    "Black Widow",
-    "Hawkeye",
-    "Thor",
-    "Scarlet Witch",
-    "Black Panther"
-  )
 
-  private val _email = MutableLiveData<String>()
-  val email: LiveData<String>
-    get() = _email
-
-  private val _isEmailValid = MutableLiveData<Boolean>()
-  val isEmailValid: LiveData<Boolean>
-    get() = _isEmailValid
-
-  private val _username = MutableLiveData<String>()
-  val username: LiveData<String>
-    get() = _username
-
-  private val _isStarWarsSelected = MutableLiveData<Boolean>()
-  val isStarWarsSelected: LiveData<Boolean>
-    get() = _isStarWarsSelected
-
-  private val _favoriteAvenger = MutableLiveData<String>()
-  val favoriteAvenger: LiveData<String>
-    get() = _favoriteAvenger
-
-  private val _showDropDownMenu = MutableLiveData<Boolean>()
-  val showDropDownMenu: LiveData<Boolean>
-    get() = _showDropDownMenu
-
-  val isFormValid = MediatorLiveData<Boolean>().apply {
-    addSource(email) {
-      value = isFormValid()
-    }
-    addSource(username) {
-      value = isFormValid()
-    }
-    addSource(favoriteAvenger) {
-      value = isFormValid()
-    }
-    addSource(isEmailValid) {
-      value = isFormValid()
-    }
-  }
+  private val _formData = MutableLiveData(RegistrationFormData())
+  val formData: LiveData<RegistrationFormData>
+    get() = _formData
 
   fun onClearClicked() {
-    _email.value = ""
-    _username.value = ""
-    _isStarWarsSelected.value = true
-    _favoriteAvenger.value = favoriteAvengerDefault
+    _formData.value = RegistrationFormData()
   }
 
   fun onDropDownClicked() {
-    _showDropDownMenu.value = true
+    _formData.value = _formData.value?.copy(showDropDownMenu = true)
   }
 
   fun onDropDownDismissed() {
-    _showDropDownMenu.value = false
+    _formData.value = _formData.value?.copy(showDropDownMenu = false)
   }
 
-  fun onEmailChanged(value: String) {
-    _email.value = value
-    _isEmailValid.value = validateEmail(value)
+  fun onEmailChanged(email: String) {
+    val isFormValid = _formData.value?.run {
+      isFormValid(email, isValidEmail, username, favoriteAvenger)
+    } ?: false
+    _formData.value = _formData.value?.copy(
+      email = email,
+      isValidEmail = validateEmail(email),
+      isRegisterEnabled = isFormValid
+    )
   }
 
   fun onFavoriteAvengerChanged(index: Int) {
-    _favoriteAvenger.value = avengers[index]
-    _showDropDownMenu.value = false
+    val isFormValid = _formData.value?.run {
+      isFormValid(email, isValidEmail, username, avengersList[index])
+    } ?: false
+    _formData.value = _formData.value?.copy(
+      favoriteAvenger = avengersList[index],
+      showDropDownMenu = false,
+      isRegisterEnabled = isFormValid
+    )
   }
 
-  fun onUsernameChanged(value: String) {
-    _username.value = value
+  fun onUsernameChanged(username: String) {
+    val isFormValid = _formData.value?.run {
+      isFormValid(email, isValidEmail, username, favoriteAvenger)
+    } ?: false
+    _formData.value = _formData.value?.copy(username = username, isRegisterEnabled = isFormValid)
   }
 
-  fun onStarWarsSelectedChanged(value: Boolean) {
-    _isStarWarsSelected.value = value
+  fun onStarWarsSelectedChanged(isStarWarsSelected: Boolean) {
+    _formData.value = _formData.value?.copy(isStarWarsSelected = isStarWarsSelected)
   }
 
   private fun validateEmail(email: String): Boolean {
-     return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    return Patterns.EMAIL_ADDRESS.matcher(email).matches()
   }
 
-  private fun isFormValid() =
-    _email.value?.isNotEmpty() == true &&
-      _isEmailValid.value == true &&
-      _username.value?.isNotEmpty() == true &&
-      _favoriteAvenger.value?.equals(favoriteAvengerDefault) == false
+  private fun isFormValid(
+    email: String,
+    isValidEmail: Boolean,
+    username: String,
+    favoriteAvenger: String
+  ) =
+    email.isNotEmpty() && isValidEmail && username.isNotEmpty() && favoriteAvenger != favoriteAvengerDefault
 }

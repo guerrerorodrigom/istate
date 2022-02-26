@@ -53,19 +53,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.raywenderlich.istate.models.RegistrationFormData
 import com.raywenderlich.istate.models.User
 import istate.R
 
 @Composable
 fun RegistrationFormScreen(
-  email: String,
-  username: String,
-  isStarWarsSelected: Boolean,
-  avengers: List<String>,
-  showDropDownMenu: Boolean,
-  favoriteAvenger: String,
-  isRegisterEnabled: Boolean,
-  isValidEmail: Boolean,
+  registrationFormData: RegistrationFormData,
   onUsernameChanged: (String) -> Unit,
   onEmailChanged: (String) -> Unit,
   onStarWarsSelectedChanged: (Boolean) -> Unit,
@@ -79,15 +73,15 @@ fun RegistrationFormScreen(
     modifier = Modifier.padding(16.dp)
   ) {
     EditTextField(
-      value = email,
+      value = registrationFormData.email,
       onValueChange = { onEmailChanged(it) },
       leadingIcon = Icons.Default.Email,
       placeholder = R.string.email,
-      isError = !isValidEmail
+      isError = !registrationFormData.isValidEmail
     )
 
     EditTextField(
-      value = username,
+      value = registrationFormData.username,
       onValueChange = { onUsernameChanged(it) },
       leadingIcon = Icons.Default.AccountBox,
       placeholder = R.string.username,
@@ -101,13 +95,13 @@ fun RegistrationFormScreen(
         .padding(top = 16.dp)
     ) {
       RadioButtonWithText(
-        isSelected = isStarWarsSelected,
+        isSelected = registrationFormData.isStarWarsSelected,
         onClick = { onStarWarsSelectedChanged(true) },
         text = R.string.star_wars,
         modifier = Modifier.align(Alignment.CenterVertically)
       )
       RadioButtonWithText(
-        isSelected = !isStarWarsSelected,
+        isSelected = !registrationFormData.isStarWarsSelected,
         onClick = { onStarWarsSelectedChanged(false) },
         text = R.string.star_trek,
         modifier = Modifier.align(Alignment.CenterVertically)
@@ -119,9 +113,9 @@ fun RegistrationFormScreen(
         .clickable(onClick = { onDropDownClicked() })
     ) {
       DropDown(
-        selectedValue = favoriteAvenger,
-        showDropDownMenu = showDropDownMenu,
-        menuItems = avengers,
+        selectedValue = registrationFormData.favoriteAvenger,
+        showDropDownMenu = registrationFormData.showDropDownMenu,
+        menuItems = registrationFormData.avengers,
         onDismissRequest = { onDropDownDismissed() },
         onItemSelected = { index ->
           onFavoriteAvengerChanged(index)
@@ -132,15 +126,15 @@ fun RegistrationFormScreen(
       onClick = {
         onRegisterClicked(
           User(
-            username = username,
-            email = email,
-            favoriteAvenger = favoriteAvenger,
-            likesStarWars = isStarWarsSelected
+            username = registrationFormData.username,
+            email = registrationFormData.email,
+            favoriteAvenger = registrationFormData.favoriteAvenger,
+            likesStarWars = registrationFormData.isStarWarsSelected
           )
         )
       },
       modifier = Modifier.fillMaxWidth(),
-      enabled = isRegisterEnabled
+      enabled = registrationFormData.isRegisterEnabled
     ) {
       Text(stringResource(R.string.register))
     }
@@ -223,13 +217,19 @@ fun RadioButtonWithText(
 @Preview
 @Composable
 fun PreviewTextInputField() {
-  RegistrationFormScreen(
+  val registrationFormData = RegistrationFormData(
     avengers = listOf(),
     email = "",
     favoriteAvenger = "",
     username = "",
     isStarWarsSelected = true,
     isRegisterEnabled = true,
+    showDropDownMenu = false,
+    isValidEmail = true
+  )
+
+  RegistrationFormScreen(
+    registrationFormData = registrationFormData,
     onClearClicked = {},
     onDropDownClicked = {},
     onDropDownDismissed = {},
@@ -237,8 +237,6 @@ fun PreviewTextInputField() {
     onFavoriteAvengerChanged = {},
     onRegisterClicked = {},
     onStarWarsSelectedChanged = {},
-    onUsernameChanged = {},
-    showDropDownMenu = false,
-    isValidEmail = true
+    onUsernameChanged = {}
   )
 }
