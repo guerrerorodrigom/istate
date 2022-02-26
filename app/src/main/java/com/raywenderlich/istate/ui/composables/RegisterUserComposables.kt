@@ -33,13 +33,20 @@
  */
 package com.raywenderlich.istate.ui.composables
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.RadioButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -47,6 +54,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,23 +65,12 @@ fun RegistrationFormScreen() {
   Column(
     modifier = Modifier.padding(16.dp)
   ) {
-    OutlinedTextField(
-      value = "",
-      onValueChange = { },
-      leadingIcon = { Icon(Icons.Default.Email, contentDescription = "") },
-      modifier = Modifier
-        .padding(top = 16.dp)
-        .fillMaxWidth(),
-      placeholder = { Text(stringResource(R.string.email)) }
-    )
-    OutlinedTextField(
-      value = "",
-      onValueChange = { },
-      leadingIcon = { Icon(Icons.Default.AccountBox, contentDescription = "") },
-      modifier = Modifier
-        .padding(top = 16.dp)
-        .fillMaxWidth(),
-      placeholder = { Text(stringResource(R.string.username)) }
+    EditTextField(leadingIcon = Icons.Default.Email, placeholder = R.string.email)
+
+    EditTextField(
+      leadingIcon = Icons.Default.AccountBox,
+      placeholder = R.string.username,
+      modifier = Modifier.padding(top = 16.dp),
     )
 
     Row(
@@ -81,46 +78,13 @@ fun RegistrationFormScreen() {
         .fillMaxWidth()
         .padding(top = 16.dp)
     ) {
-      RadioButton(
-        selected = true,
-        onClick = { }
-      )
-      Text(
-        text = stringResource(R.string.star_wars),
-        style = MaterialTheme.typography.body1.merge(),
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
-      )
-      RadioButton(
-        selected = false,
-        onClick = { }
-      )
-      Text(
-        text = stringResource(R.string.star_trek),
-        style = MaterialTheme.typography.body1.merge(),
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
-      )
+      RadioButtonWithText(text = R.string.star_wars)
+
+      RadioButtonWithText(text = R.string.star_trek)
     }
-    Row(
-      modifier = Modifier
-        .padding(vertical = 16.dp)
-        .clickable(onClick = { })
-    ) {
-      Text("")
-      Icon(Icons.Filled.ArrowDropDown, contentDescription = "")
-      DropdownMenu(
-        expanded = false,
-        onDismissRequest = { },
-        modifier = Modifier
-          .fillMaxWidth()
-          .background(Color.White)
-      ) {
-        listOf<String>().forEachIndexed { index, name ->
-          DropdownMenuItem(onClick = { }) {
-            Text(text = name)
-          }
-        }
-      }
-    }
+
+    DropDown(menuItems = listOf())
+
     OutlinedButton(
       onClick = { },
       modifier = Modifier.fillMaxWidth(),
@@ -135,6 +99,59 @@ fun RegistrationFormScreen() {
         .padding(top = 8.dp)
     ) {
       Text(stringResource(R.string.clear))
+    }
+  }
+}
+
+@Composable
+fun EditTextField(
+  leadingIcon: ImageVector,
+  @StringRes placeholder: Int,
+  modifier: Modifier = Modifier
+) {
+  OutlinedTextField(
+    value = "",
+    onValueChange = { },
+    leadingIcon = { Icon(leadingIcon, contentDescription = "") },
+    modifier = modifier.fillMaxWidth(),
+    placeholder = { Text(stringResource(placeholder)) }
+  )
+}
+
+@Composable
+fun RadioButtonWithText(
+  @StringRes text: Int,
+  modifier: Modifier = Modifier
+) {
+  RadioButton(
+    selected = false,
+    onClick = { }
+  )
+  Text(
+    text = stringResource(text),
+    style = MaterialTheme.typography.body1.merge(),
+    modifier = modifier.padding(start = 8.dp, end = 8.dp)
+  )
+}
+
+@Composable
+fun DropDown(
+  menuItems: List<String>,
+  modifier: Modifier = Modifier
+) {
+  Text("")
+  Icon(Icons.Filled.ArrowDropDown, contentDescription = "")
+  DropdownMenu(
+    expanded = false,
+    onDismissRequest = { },
+    modifier = modifier
+      .fillMaxWidth()
+      .background(Color.White)
+  ) {
+    menuItems.forEachIndexed { index, name ->
+      DropdownMenuItem(onClick = { }) {
+        Text(text = name)
+      }
     }
   }
 }
