@@ -35,6 +35,7 @@ package com.raywenderlich.istate.ui.composables
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -139,18 +140,23 @@ fun DropDown(
   menuItems: List<String>,
   modifier: Modifier = Modifier
 ) {
-  Text("")
-  Icon(Icons.Filled.ArrowDropDown, contentDescription = "")
-  DropdownMenu(
-    expanded = false,
-    onDismissRequest = { },
-    modifier = modifier
-      .fillMaxWidth()
-      .background(Color.White)
+  Row(
+    modifier = Modifier
+      .padding(vertical = 16.dp)
   ) {
-    menuItems.forEachIndexed { index, name ->
-      DropdownMenuItem(onClick = { }) {
-        Text(text = name)
+    Text("")
+    Icon(Icons.Filled.ArrowDropDown, contentDescription = "")
+    DropdownMenu(
+      expanded = false,
+      onDismissRequest = { },
+      modifier = modifier
+        .fillMaxWidth()
+        .background(Color.White)
+    ) {
+      menuItems.forEachIndexed { index, name ->
+        DropdownMenuItem(onClick = { }) {
+          Text(text = name)
+        }
       }
     }
   }
