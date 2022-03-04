@@ -35,6 +35,7 @@ package com.raywenderlich.istate.ui.composables
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -52,6 +53,8 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -59,6 +62,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.raywenderlich.istate.R
+import com.raywenderlich.istate.models.avengersList
 
 @Composable
 fun RegistrationFormScreen() {
@@ -83,7 +87,7 @@ fun RegistrationFormScreen() {
       RadioButtonWithText(text = R.string.star_trek)
     }
 
-    DropDown(menuItems = listOf())
+    DropDown(menuItems = avengersList)
 
     OutlinedButton(
       onClick = { },
@@ -109,9 +113,12 @@ fun EditTextField(
   @StringRes placeholder: Int,
   modifier: Modifier = Modifier
 ) {
+  val text = remember {
+    mutableStateOf("")
+  }
   OutlinedTextField(
-    value = "",
-    onValueChange = { },
+    value = text.value,
+    onValueChange = { text.value = it },
     leadingIcon = { Icon(leadingIcon, contentDescription = "") },
     modifier = modifier.fillMaxWidth(),
     placeholder = { Text(stringResource(placeholder)) }
@@ -123,9 +130,12 @@ fun RadioButtonWithText(
   @StringRes text: Int,
   modifier: Modifier = Modifier
 ) {
+  val isSelected = remember {
+    mutableStateOf(false)
+  }
   RadioButton(
-    selected = false,
-    onClick = { }
+    selected = isSelected.value,
+    onClick = { isSelected.value = !isSelected.value }
   )
   Text(
     text = stringResource(text),
@@ -139,18 +149,34 @@ fun DropDown(
   menuItems: List<String>,
   modifier: Modifier = Modifier
 ) {
-  Text("")
-  Icon(Icons.Filled.ArrowDropDown, contentDescription = "")
-  DropdownMenu(
-    expanded = false,
-    onDismissRequest = { },
-    modifier = modifier
-      .fillMaxWidth()
-      .background(Color.White)
+  val selectedItem = remember {
+    mutableStateOf("Select your favorite Avenger:")
+  }
+  val isExpanded = remember {
+    mutableStateOf(false)
+  }
+
+  Row(
+    modifier = Modifier
+      .padding(vertical = 16.dp)
+      .clickable { isExpanded.value = true }
   ) {
-    menuItems.forEachIndexed { index, name ->
-      DropdownMenuItem(onClick = { }) {
-        Text(text = name)
+    Text(selectedItem.value)
+    Icon(Icons.Filled.ArrowDropDown, contentDescription = "")
+    DropdownMenu(
+      expanded = isExpanded.value,
+      onDismissRequest = { isExpanded.value = false },
+      modifier = modifier
+        .fillMaxWidth()
+        .background(Color.White)
+    ) {
+      menuItems.forEachIndexed { index, name ->
+        DropdownMenuItem(onClick = {
+          selectedItem.value = menuItems[index]
+          isExpanded.value = false
+        }) {
+          Text(text = name)
+        }
       }
     }
   }
