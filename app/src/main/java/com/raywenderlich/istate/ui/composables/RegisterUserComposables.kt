@@ -62,19 +62,38 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.raywenderlich.istate.R
+import com.raywenderlich.istate.models.RegistrationFormData
+import com.raywenderlich.istate.models.User
 import com.raywenderlich.istate.models.avengersList
 
 @Composable
-fun RegistrationFormScreen() {
+fun RegistrationFormScreen(
+  registrationFormData: RegistrationFormData,
+  onEmailChanged: (String) -> Unit,
+  onUsernameChanged: (String) -> Unit,
+  onStarWarsSelectedChanged: (Boolean) -> Unit,
+  onFavoriteAvengerChanged: (String) -> Unit,
+  onClearClicked: () -> Unit,
+  onRegisterClicked: (User) -> Unit
+) {
   Column(
     modifier = Modifier.padding(16.dp)
   ) {
-    EditTextField(leadingIcon = Icons.Default.Email, placeholder = R.string.email)
+    EditTextField(
+      leadingIcon = Icons.Default.Email,
+      placeholder = R.string.email,
+      value = registrationFormData.email,
+      onValueChanged = { onEmailChanged(it) },
+      isError = !registrationFormData.isValidEmail
+    )
 
     EditTextField(
       leadingIcon = Icons.Default.AccountBox,
       placeholder = R.string.username,
       modifier = Modifier.padding(top = 16.dp),
+      value = registrationFormData.username,
+      onValueChanged = { onUsernameChanged(it) },
+      isError = registrationFormData.username.isEmpty()
     )
 
     Row(
@@ -82,22 +101,43 @@ fun RegistrationFormScreen() {
         .fillMaxWidth()
         .padding(top = 16.dp)
     ) {
-      RadioButtonWithText(text = R.string.star_wars)
+      RadioButtonWithText(
+        text = R.string.star_wars,
+        isSelected = registrationFormData.isStarWarsSelected,
+        onClick = { onStarWarsSelectedChanged(true) }
+      )
 
-      RadioButtonWithText(text = R.string.star_trek)
+      RadioButtonWithText(
+        text = R.string.star_trek,
+        isSelected = !registrationFormData.isStarWarsSelected,
+        onClick = { onStarWarsSelectedChanged(false) }
+      )
     }
 
-    DropDown(menuItems = avengersList)
+    DropDown(
+      menuItems = avengersList,
+      onItemSelected = { onFavoriteAvengerChanged(it) },
+      selectedItem = registrationFormData.favoriteAvenger
+    )
 
     OutlinedButton(
-      onClick = { },
+      onClick = {
+        onRegisterClicked(
+          User(
+            username = registrationFormData.username,
+            email = registrationFormData.email,
+            favoriteAvenger = registrationFormData.favoriteAvenger,
+            likesStarWars = registrationFormData.isStarWarsSelected
+          )
+        )
+      },
       modifier = Modifier.fillMaxWidth(),
-      enabled = false
+      enabled = registrationFormData.isRegisterEnabled
     ) {
       Text(stringResource(R.string.register))
     }
     OutlinedButton(
-      onClick = { },
+      onClick = { onClearClicked() },
       modifier = Modifier
         .fillMaxWidth()
         .padding(top = 8.dp)
@@ -109,33 +149,33 @@ fun RegistrationFormScreen() {
 
 @Composable
 fun EditTextField(
+  value: String,
+  onValueChanged: (String) -> Unit,
   leadingIcon: ImageVector,
   @StringRes placeholder: Int,
+  isError: Boolean,
   modifier: Modifier = Modifier
 ) {
-  val text = remember {
-    mutableStateOf("")
-  }
   OutlinedTextField(
-    value = text.value,
-    onValueChange = { text.value = it },
+    value = value,
+    onValueChange = { onValueChanged(it) },
     leadingIcon = { Icon(leadingIcon, contentDescription = "") },
     modifier = modifier.fillMaxWidth(),
-    placeholder = { Text(stringResource(placeholder)) }
+    placeholder = { Text(stringResource(placeholder)) },
+    isError = isError
   )
 }
 
 @Composable
 fun RadioButtonWithText(
   @StringRes text: Int,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  isSelected: Boolean,
+  onClick: () -> Unit
 ) {
-  val isSelected = remember {
-    mutableStateOf(false)
-  }
   RadioButton(
-    selected = isSelected.value,
-    onClick = { isSelected.value = !isSelected.value }
+    selected = isSelected,
+    onClick = { onClick() }
   )
   Text(
     text = stringResource(text),
@@ -147,11 +187,10 @@ fun RadioButtonWithText(
 @Composable
 fun DropDown(
   menuItems: List<String>,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  selectedItem: String,
+  onItemSelected: (String) -> Unit
 ) {
-  val selectedItem = remember {
-    mutableStateOf("Select your favorite Avenger:")
-  }
   val isExpanded = remember {
     mutableStateOf(false)
   }
@@ -161,7 +200,7 @@ fun DropDown(
       .padding(vertical = 16.dp)
       .clickable { isExpanded.value = true }
   ) {
-    Text(selectedItem.value)
+    Text(selectedItem)
     Icon(Icons.Filled.ArrowDropDown, contentDescription = "")
     DropdownMenu(
       expanded = isExpanded.value,
@@ -172,7 +211,7 @@ fun DropDown(
     ) {
       menuItems.forEachIndexed { index, name ->
         DropdownMenuItem(onClick = {
-          selectedItem.value = menuItems[index]
+          onItemSelected(menuItems[index])
           isExpanded.value = false
         }) {
           Text(text = name)
@@ -185,5 +224,13 @@ fun DropDown(
 @Preview
 @Composable
 fun PreviewTextInputField() {
-  RegistrationFormScreen()
+  RegistrationFormScreen(
+    registrationFormData = RegistrationFormData(),
+    onClearClicked = { },
+    onEmailChanged = { },
+    onFavoriteAvengerChanged = { },
+    onRegisterClicked = { },
+    onStarWarsSelectedChanged = { },
+    onUsernameChanged = { }
+  )
 }

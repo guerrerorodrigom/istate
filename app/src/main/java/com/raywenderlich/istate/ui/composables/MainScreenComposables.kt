@@ -36,6 +36,10 @@ package com.raywenderlich.istate.ui.composables
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -65,8 +69,18 @@ fun FabAddUser(navController: NavController) {
 }
 
 @Composable
-fun UserList() {
+fun UserList(users: List<User>) {
+  val listState = rememberLazyListState()
 
+  LazyColumn(state = listState) {
+    items(
+      items = users,
+      key = { user -> user.email }
+    ) { user ->
+      ItemUser(user)
+      Divider()
+    }
+  }
 }
 
 @Composable
@@ -95,5 +109,5 @@ fun PreviewItemUser() {
 @Preview
 fun PreviewUserList() {
   val user = User("username", "email@email.com", "Iron Man", true)
-  UserList()
+  UserList(users = listOf(user, user, user, user, user))
 }
