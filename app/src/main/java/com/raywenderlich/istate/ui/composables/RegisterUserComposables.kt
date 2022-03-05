@@ -162,9 +162,3 @@ fun DropDown(
     }
   }
 }
-
-@Preview
-@Composable
-fun PreviewTextInputField() {
-  RegistrationFormScreen()
-}
