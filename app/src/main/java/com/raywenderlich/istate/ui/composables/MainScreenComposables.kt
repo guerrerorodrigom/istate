@@ -65,7 +65,7 @@ fun FabAddUser(navController: NavController) {
 }
 
 @Composable
-fun UserList() {
+fun UserList(users: List<User> = emptyList()) {
 
 }
 
