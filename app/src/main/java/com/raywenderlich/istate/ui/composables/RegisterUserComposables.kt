@@ -60,6 +60,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.raywenderlich.istate.R
+import com.raywenderlich.istate.models.avengersList
 
 @Composable
 fun RegistrationFormScreen() {
@@ -84,7 +85,7 @@ fun RegistrationFormScreen() {
       RadioButtonWithText(text = R.string.star_trek)
     }
 
-    DropDown(menuItems = listOf())
+    DropDown(menuItems = avengersList)
 
     OutlinedButton(
       onClick = { },
