@@ -71,12 +71,12 @@ class FormViewModel : ViewModel() {
     )
   }
 
-  fun onFavoriteAvengerChanged(index: Int) {
+  fun onFavoriteAvengerChanged(value: String) {
     val isFormValid = _formData.value?.run {
-      isFormValid(email, isValidEmail, username, avengersList[index])
+      isFormValid(email, isValidEmail, username, value)
     } ?: false
     _formData.value = _formData.value?.copy(
-      favoriteAvenger = avengersList[index],
+      favoriteAvenger = value,
       showDropDownMenu = false,
       isRegisterEnabled = isFormValid
     )
