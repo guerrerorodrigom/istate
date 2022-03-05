@@ -61,7 +61,6 @@ class MainActivity : ComponentActivity() {
     setContent {
       IStateTheme {
         val navController = rememberNavController()
-        val users by mainViewModel.users.observeAsState(emptyList())
 
         NavHost(navController = navController, startDestination = "list") {
           composable("list") {
