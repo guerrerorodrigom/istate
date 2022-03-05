@@ -150,10 +150,10 @@ fun RegistrationFormScreen(
 @Composable
 fun EditTextField(
   value: String,
+  isError: Boolean,
   onValueChanged: (String) -> Unit,
   leadingIcon: ImageVector,
   @StringRes placeholder: Int,
-  isError: Boolean,
   modifier: Modifier = Modifier
 ) {
   OutlinedTextField(
@@ -168,10 +168,10 @@ fun EditTextField(
 
 @Composable
 fun RadioButtonWithText(
-  @StringRes text: Int,
-  modifier: Modifier = Modifier,
   isSelected: Boolean,
-  onClick: () -> Unit
+  onClick: () -> Unit,
+  @StringRes text: Int,
+  modifier: Modifier = Modifier
 ) {
   RadioButton(
     selected = isSelected,
@@ -186,10 +186,10 @@ fun RadioButtonWithText(
 
 @Composable
 fun DropDown(
-  menuItems: List<String>,
-  modifier: Modifier = Modifier,
   selectedItem: String,
-  onItemSelected: (String) -> Unit
+  onItemSelected: (String) -> Unit,
+  menuItems: List<String>,
+  modifier: Modifier = Modifier
 ) {
   val isExpanded = remember {
     mutableStateOf(false)
