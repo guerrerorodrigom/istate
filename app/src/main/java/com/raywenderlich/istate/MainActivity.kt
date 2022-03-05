@@ -48,6 +48,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.raywenderlich.istate.models.RegistrationFormData
+import com.raywenderlich.istate.models.User
 import com.raywenderlich.istate.ui.composables.FabAddUser
 import com.raywenderlich.istate.ui.composables.RegistrationFormScreen
 import com.raywenderlich.istate.ui.composables.UserList
@@ -61,15 +63,29 @@ class MainActivity : ComponentActivity() {
     setContent {
       IStateTheme {
         val navController = rememberNavController()
+        val users by mainViewModel.users.observeAsState(emptyList())
 
         NavHost(navController = navController, startDestination = "list") {
           composable("list") {
-            UserListScreen(navController)
+            UserListScreen(navController, users)
           }
           composable("form") {
             val formViewModel: FormViewModel by viewModels()
+            val registrationFormData by formViewModel.formData.observeAsState(RegistrationFormData())
 
-            RegistrationFormScreen()
+            RegistrationFormScreen(
+              registrationFormData = registrationFormData,
+              onUsernameChanged = formViewModel::onUsernameChanged,
+              onEmailChanged = formViewModel::onEmailChanged,
+              onStarWarsSelectedChanged = formViewModel::onStarWarsSelectedChanged,
+              onFavoriteAvengerChanged = formViewModel::onFavoriteAvengerChanged,
+              onClearClicked = formViewModel::onClearClicked,
+              onRegisterClicked = { user ->
+                formViewModel.onClearClicked()
+                mainViewModel.addUser(user)
+                navController.popBackStack()
+              }
+            )
           }
         }
       }
@@ -80,6 +96,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun UserListScreen(
   navController: NavController,
+  users: List<User>
 ) {
   Surface(color = MaterialTheme.colors.background) {
     Scaffold(
@@ -88,7 +105,7 @@ fun UserListScreen(
       },
       floatingActionButtonPosition = FabPosition.End
     ) {
-      UserList()
+      UserList(users)
     }
   }
 }
